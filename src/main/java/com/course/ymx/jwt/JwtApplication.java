@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
-@ServletComponentScan(basePackages="com.course.ymx.jwt.security")
+//@ServletComponentScan(basePackages="com.course.ymx.jwt.security")
 public class JwtApplication {
     public static void main(String[] args) {
         SpringApplication.run(JwtApplication.class, args);

@@ -6,6 +6,7 @@ import com.course.ymx.jwt.common.base.BaseController;
 import com.course.ymx.jwt.common.result.ResponseVO;
 import com.course.ymx.jwt.config.properties.JwtProperties;
 import com.course.ymx.jwt.entity.User;
+import com.course.ymx.jwt.service.UserService;
 import com.course.ymx.jwt.utils.JwtUtils;
 import com.course.ymx.jwt.utils.RedisUtils;
 import com.course.ymx.jwt.vo.entity.UserInfo;
@@ -23,8 +24,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class LoginController extends BaseController {
 
-//    @Autowired
-//    private UserService userService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private JwtProperties jwt;
     @Autowired
@@ -58,15 +59,15 @@ public class LoginController extends BaseController {
             return getFailure("参数错误");
         }
         //根据用户名和密码查找用户
-//        User user = userService.findByUserNameAndPassWord(userName,passWord);
-        User user = new User();
+        User user = userService.findByUserNameAndPassWord(userName,passWord);
+//        User user = new User();
         if (user == null) {
             return getFailure("用户名或密码错误!");
         }
         String token = null;
         try {
             //用户存在生成token
-            token = JwtUtils.generateToken(new UserInfo(user.getId(),user.getUserName()), jwt.getPrivateKey(), jwt.getExpire());
+            token = JwtUtils.generateToken(new UserInfo(user.getId(),user.getUserName(),user.getRoleId()), jwt.getPrivateKey(), jwt.getExpire());
         } catch (Exception e) {
             e.printStackTrace();
         }

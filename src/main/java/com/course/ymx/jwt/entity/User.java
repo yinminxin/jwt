@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.List;
 
 /**
  * @author yinminxin
@@ -34,6 +35,18 @@ public class User extends BaseEntity {
 
     @Transient
     private String token;
+
+    //角色Id
+    @Transient
+    private List<String> roleId;
+
+    public List<String> getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(List<String> roleId) {
+        this.roleId = roleId;
+    }
 
     public String getToken() {
         return token;

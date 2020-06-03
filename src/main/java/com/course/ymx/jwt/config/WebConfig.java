@@ -6,6 +6,7 @@ import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.course.ymx.jwt.config.Interceptor.JwtInterceptor;
+import com.course.ymx.jwt.config.Interceptor.PermissionInterceptor;
 import com.course.ymx.jwt.config.properties.Cors;
 import com.course.ymx.jwt.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class WebConfig extends WebMvcConfigurationSupport {
     private Cors cors;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private PermissionInterceptor permissionInterceptor;
 
     public HttpMessageConverter<String> stringConverter() {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(
@@ -121,7 +124,9 @@ public class WebConfig extends WebMvcConfigurationSupport {
     public void addInterceptors(InterceptorRegistry registry) {
         //添加拦截器
         String[] excludePath = {"/login","/aop/testAop"};
-        registry.addInterceptor(new JwtInterceptor(redisUtils)).excludePathPatterns(excludePath);
+//        registry.addInterceptor(new JwtInterceptor(redisUtils)).excludePathPatterns(excludePath);
+
+        registry.addInterceptor(permissionInterceptor).excludePathPatterns(excludePath);
     }
 
 }

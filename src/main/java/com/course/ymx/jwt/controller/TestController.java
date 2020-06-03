@@ -43,7 +43,7 @@ public class TestController extends BaseController {
      */
 
     /**
-     * @api {get} /test/getList get请求获取数据
+     * @api {post} /test/getList get请求获取数据
      * @apiName getList
      * @apiDescription 测试api详情
      * @apiGroup test
@@ -66,7 +66,7 @@ public class TestController extends BaseController {
     "success": true
     }
      */
-    @GetMapping("/getList")
+    @PostMapping("/getList")
     @ResponseBody
     private ResponseVO getList(@RequestBody String str){
         if (StringUtils.isNotBlank(str)) {
