@@ -20,13 +20,25 @@ public class AESUtils {
     private static final String ALGORITHMSTR = "AES/ECB/PKCS5Padding";
 
     /**
+     * 测试
+     */
+    public static void main(String[] args) throws Exception {
+        String content = "jjdddxf1314.sdfggdsf";
+        System.out.println("加密前：" + content);
+        System.out.println("加密密钥和解密密钥：" + KEY);
+        String encrypt = aesEncrypt(content, KEY);
+        System.out.println("加密后：" + encrypt);
+        String decrypt = aesDecrypt(encrypt, KEY);
+        System.out.println("解密后：" + decrypt);
+    }
+
+    /**
      * aes解密
      * @param encrypt 内容
      * @param key 加密后的密钥
      * @return
      */
     public static String aesDecryptByKey(String encrypt,String key){
-//        String decryptKey = RSASimpleUtils.decryptBase64(key);
         try {
             return aesDecrypt(encrypt, key);
         } catch (Exception e) {
@@ -42,7 +54,6 @@ public class AESUtils {
      * @return
      */
     public static String aesEncryptByKey(String content,String key){
-//        String decryptKey = RSASimpleUtils.decryptBase64(key);
         try {
             return aesEncrypt(content, key);
         } catch (Exception e) {
@@ -168,16 +179,4 @@ public class AESUtils {
         return StringUtils.isEmpty(encryptStr) ? null : aesDecryptByBytes(base64Decode(encryptStr), decryptKey);
     }
 
-    /**
-     * 测试
-     */
-    public static void main(String[] args) throws Exception {
-        String content = "123";
-        System.out.println("加密前：" + content);
-        System.out.println("加密密钥和解密密钥：" + KEY);
-        String encrypt = aesEncrypt(content, KEY);
-        System.out.println("加密后：" + encrypt);
-        String decrypt = aesDecrypt(encrypt, KEY);
-        System.out.println("解密后：" + decrypt);
-    }
 }
