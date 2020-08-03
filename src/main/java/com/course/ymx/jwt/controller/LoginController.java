@@ -11,9 +11,13 @@ import com.course.ymx.jwt.utils.JwtUtils;
 import com.course.ymx.jwt.utils.RedisUtils;
 import com.course.ymx.jwt.vo.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author yinminxin
@@ -23,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/")
 public class LoginController extends BaseController {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private UserService userService;
@@ -50,6 +56,9 @@ public class LoginController extends BaseController {
                     userName = jsonObject.getString("userName");
                     passWord = jsonObject.getString("passWord");
                 }else{
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("请求参数验证不合法，异常信息：【{}】", "参数错误");
+                    }
                     return getFailure("参数错误");
                 }
             } catch (NumberFormatException e) {
