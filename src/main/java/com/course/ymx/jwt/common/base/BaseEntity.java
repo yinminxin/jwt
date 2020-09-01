@@ -17,10 +17,13 @@ import java.sql.Timestamp;
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
+//    @Id
+//    @GenericGenerator(name = "idGenerator", strategy = "uuid")
+//    @GeneratedValue(generator = "idGenerator")
+//    @Column(name = "id", length = 32)
     @Id
-    @GenericGenerator(name = "idGenerator", strategy = "uuid")
-    @GeneratedValue(generator = "idGenerator")
-    @Column(name = "id", length = 32)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "BIGINT COMMENT '主键ID'")
     private String id;
 
     @Basic
