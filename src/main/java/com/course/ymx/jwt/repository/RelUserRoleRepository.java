@@ -1,4 +1,4 @@
-package com.course.ymx.jwt.service.impl;
+package com.course.ymx.jwt.repository;
 
 import com.course.ymx.jwt.entity.RelUserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
