@@ -2,6 +2,8 @@ package com.course.ymx.jwt.mapper;
 
 import com.course.ymx.jwt.common.base.MyMapper;
 import com.course.ymx.jwt.entity.Test;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,4 +34,13 @@ public interface TestMapper extends MyMapper<Test,String> {
 //                    "</script>"})
 //        //根据关键字查找标题符合的草稿和已发布的公告(置顶时间和更新时间排序)
 //    List<Test> findTest(@Param("searchKey") String searchKey, @Param("id") Long id);
+
+//    @Delete({"<script>",
+//            "DELETE FROM test WHERE id in" +
+//                    "<foreach item='id' index='index' collection='ids' open='(' separator=',' close=')'>" +
+//                    "#{id}" +
+//                    "</foreach>" +
+//                    "</script>"})
+//    //根据ID集合删除
+//    List<Test> deleteTest(@Param("ids") List<Long> ids);
 }
