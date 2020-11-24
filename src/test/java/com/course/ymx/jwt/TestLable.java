@@ -5,19 +5,48 @@ import com.mysql.jdbc.Driver;
 import org.hibernate.annotations.CollectionId;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TestLable {
 
-    public static int i = 0;
-    public volatile static boolean flag = true;
+    public static void main(String[] args) {
+        //143, 264, 268, 348, 368, 198, 207, 267, 173
+//        int[] arr ={143, 264, 268, 348};
+////        int[] arr ={368, 198, 207, 267};
+//        int count = 0;
+//        for (int i : arr) {
+//            count+=i;
+//        }
+//        System.out.println(count);
+        try {
+            String decode = URLDecoder.decode("%3Cspan%3E%E5%AD%A6%E6%83%85%E7%BB%9F%E8%AE%A1%3C%2Fspan%3E%3C%2Fa%3E", "UTF-8");
+            System.out.println(decode);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public static StringBuilder sb = new StringBuilder();
+    /**
+     * 关键字格式化（中间空格换成、号）
+     */
+    public static String formatSearchKey(String searchKey) {
+        Pattern p = Pattern.compile("\\s+");
+        Matcher m = p.matcher(searchKey.trim());
+        return m.replaceAll("、");
+    }
+
+//    public static int i = 0;
+//    public volatile static boolean flag = true;
+//
+//    public static StringBuilder sb = new StringBuilder();
 
 
 //    public static void test1(){
@@ -42,11 +71,11 @@ public class TestLable {
 //        }while (start + l >= end);
 //    }
 
-    public static void main(String[] args) throws SQLException {
+//    public static void main(String[] args) throws SQLException {
 
 //        String dirName = "D:\\yinminxin\\develop";
-        String dirName = "F:\\万达信息\\微校资源复制\\各区汇总等多个文件";
-        readFileName(dirName);
+//        String dirName = "F:\\万达信息\\微校资源复制\\各区汇总等多个文件";
+//        readFileName(dirName);
 //        writeFile(sb.toString());
 
 //        List<User> users = new ArrayList<>();
@@ -201,55 +230,55 @@ public class TestLable {
 //            }
 //        }
         // 在此处无法 break 或 continue 标签
-    }
+//    }
 
-    private static void readFileName(String dirName){
-        File file = new File(dirName);
-        File[] files = file.listFiles();
-        if (files == null || files.length <=0) {
-            return;
-        }
-
-        for (File file1 : files) {
-            if (file1.isDirectory()) {
-                readFileName(file1.getAbsolutePath());
-            }else if (file1.isFile()){
-                System.out.println(file1.getAbsolutePath());
-                try {
-                    writeFile(file1.getAbsolutePath());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                sb.append(file1.getAbsolutePath());
-            }
-        }
+//    private static void readFileName(String dirName){
+//        File file = new File(dirName);
+//        File[] files = file.listFiles();
+//        if (files == null || files.length <=0) {
+//            return;
+//        }
+//
+//        for (File file1 : files) {
+//            if (file1.isDirectory()) {
+//                readFileName(file1.getAbsolutePath());
+//            }else if (file1.isFile()){
+//                System.out.println(file1.getAbsolutePath());
+//                try {
+//                    writeFile(file1.getAbsolutePath());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+////                sb.append(file1.getAbsolutePath());
+//            }
+//        }
 //        String[] list = file.list();
 //        for (String s : list) {
 //            System.out.println(s);
 //        }
-    }
+//    }
 
-    private static void writeFile(String text) throws IOException {
-        File file = new File("D:\\yinminxin\\项目需求\\2020\\fileNames.txt");
-
-        FileWriter writer = null;
-        BufferedWriter out = null;
-        try {
-            if (file.exists()) {
-                file.createNewFile();
-            }
-            writer = new FileWriter(file,true);
-            out = new BufferedWriter(writer);
-            out.write(text + "\r\n");
-            out.flush(); // 把缓存区内容压入文件
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            out.close();
-            writer.close();
-        }
-
-    }
+//    private static void writeFile(String text) throws IOException {
+//        File file = new File("D:\\yinminxin\\项目需求\\2020\\fileNames.txt");
+//
+//        FileWriter writer = null;
+//        BufferedWriter out = null;
+//        try {
+//            if (file.exists()) {
+//                file.createNewFile();
+//            }
+//            writer = new FileWriter(file,true);
+//            out = new BufferedWriter(writer);
+//            out.write(text + "\r\n");
+//            out.flush(); // 把缓存区内容压入文件
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            out.close();
+//            writer.close();
+//        }
+//
+//    }
 
 
 }
