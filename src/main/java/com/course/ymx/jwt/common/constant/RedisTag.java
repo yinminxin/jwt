@@ -7,5 +7,12 @@ package com.course.ymx.jwt.common.constant;
  */
 public class RedisTag {
 
+    /** 角色权限vo列表 */
     public static final String ROLE_PERMISSION = "ROLEPERMISSION";
+
+    /** ip记录 */
+    public static final String IP_LOGGER = "IPLOGGER";
+
+    /** ip黑名单 */
+    public static final String IP_FORBIDDEN_LIST = "IPFORBIDDENLIST";
 }

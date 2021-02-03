@@ -1,5 +1,7 @@
-package com.course.ymx.jwt.common.result;
+package com.course.ymx.jwt.common.exception;
 
+import com.course.ymx.jwt.common.result.ResponseVO;
+import com.course.ymx.jwt.common.result.ResultCode;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +16,11 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseVO defaultErrorHandler(Exception e) {
         ResponseVO result = null;
+
+        if(e instanceof DefaultException){
+            DefaultException de = (DefaultException) e;
+            return new ResponseVO(de.getCode(), de.getMessage());
+        }
         String message = e.getMessage();
         if (message.equals(ResultCode.UNAUTHORIZED.getCode())) {
             result = new ResponseVO(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage());
