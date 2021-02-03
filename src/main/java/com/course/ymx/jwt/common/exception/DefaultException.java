@@ -3,7 +3,7 @@ package com.course.ymx.jwt.common.exception;
 import com.course.ymx.jwt.common.result.ResultCode;
 
 /**
- * @description: 权限类异常
+ * @description: 默认自定义异常
  * @author: yinminxin
  * @create: 2021-02-01
  **/
