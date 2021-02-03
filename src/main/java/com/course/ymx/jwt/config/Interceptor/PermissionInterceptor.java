@@ -1,12 +1,13 @@
 package com.course.ymx.jwt.config.Interceptor;
 
 import com.course.ymx.jwt.common.constant.RedisTag;
+import com.course.ymx.jwt.common.exception.DefaultException;
+import com.course.ymx.jwt.common.result.ResultCode;
 import com.course.ymx.jwt.config.properties.Cors;
 import com.course.ymx.jwt.config.properties.JwtProperties;
-import com.course.ymx.jwt.repository.RoleRepository;
+import com.course.ymx.jwt.service.util.PermissionUtilService;
 import com.course.ymx.jwt.utils.JwtUtils;
 import com.course.ymx.jwt.utils.RedisUtils;
-import com.course.ymx.jwt.vo.entity.RolePermissionListVo;
 import com.course.ymx.jwt.vo.entity.RolePermissionVo;
 import com.course.ymx.jwt.vo.entity.UserInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author yinminxin
@@ -36,7 +36,8 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private JwtProperties jwt;
     @Autowired
-    private RoleRepository roleRepository;
+    private PermissionUtilService permissionUtilService;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -66,46 +67,37 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
             UserInfo infoFromToken = JwtUtils.getInfoFromToken(token, jwt.getPublicKey());
             List<String> roleIds = infoFromToken.getRoleId();
             //获取角色对应接口权限
-            List<RolePermissionVo> vo;
+            List<RolePermissionVo> voList;
             if (redisUtils.hasKey(RedisTag.ROLE_PERMISSION)) {
-                vo = (List<RolePermissionVo>) redisUtils.get(RedisTag.ROLE_PERMISSION);
+                voList = (List<RolePermissionVo>) redisUtils.get(RedisTag.ROLE_PERMISSION);
             }else{
-                List<RolePermissionListVo> rolePermissionListVo = roleRepository.findRolePermissionListVo();
-                vo = rolePermissionListVo
-                        .stream()
-                        .filter(Objects::nonNull)
-                        .collect(Collectors
-                                .groupingBy(RolePermissionListVo::getRoleId))
-                        .entrySet()
-                        .stream()
-                        .map(v1 -> {
-                            RolePermissionVo rolePermissionVo = new RolePermissionVo();
-                            String key = v1.getKey();
-                            rolePermissionVo.setRoleId(key);
-                            List<String> collect1 = v1.getValue().stream().filter(Objects::nonNull).map(v2 -> {
-                                return v2.getInterfaceUrl();
-                            }).collect(Collectors.toList());
-                            rolePermissionVo.setPermissionUrl(collect1);
-                            return rolePermissionVo;
-                        }).collect(Collectors.toList());
-                //TODO 结果
-                System.out.println(vo);
-                redisUtils.set(RedisTag.ROLE_PERMISSION,vo);
+                voList = permissionUtilService.findRolePermissionVoList();
+                redisUtils.set(RedisTag.ROLE_PERMISSION,voList);
             }
 
-            for (String roleId : roleIds) {
-                for (RolePermissionVo permissionVo : vo) {
-                    if (roleId.equals(permissionVo.getRoleId())) {
-                        for (String url : permissionVo.getPermissionUrl()) {
-                            if (requestURL.toString().contains(url)) {
-                                return true;
-                            }
-                        }
-                    }
+            long count = voList.stream().filter(v -> {
+                if (roleIds.contains(v.getRoleId()) && v.getPermissionUrl().contains(requestURL.toString())) {
+                    return true;
                 }
+                return false;
+            }).count();
+            if (count >= 1) {
+                return true;
             }
+
+//            for (String roleId : roleIds) {
+//                for (RolePermissionVo permissionVo : voList) {
+//                    if (roleId.equals(permissionVo.getRoleId())) {
+//                        for (String url : permissionVo.getPermissionUrl()) {
+//                            if (requestURL.toString().contains(url)) {
+//                                return true;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
-        throw new Exception(String.valueOf(HttpServletResponse.SC_UNAUTHORIZED));
+        throw new DefaultException(ResultCode.UNAUTHORIZED);
     }
 
     /**

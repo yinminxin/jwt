@@ -123,7 +123,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //添加拦截器
-        String[] excludePath = {"/login","/aop/testAop"};
+        String[] excludePath = {"/login","/aop/**","/test/**"};
 //        registry.addInterceptor(new JwtInterceptor(redisUtils)).excludePathPatterns(excludePath);
 
         registry.addInterceptor(permissionInterceptor).excludePathPatterns(excludePath);
